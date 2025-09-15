@@ -1,13 +1,24 @@
 import type { Fruit } from "../features/fruits/Fruit.type";
 
-export async function getAllFruits(): Promise<Fruit[]> {
-  const res = await fetch("/fruits/all");
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+const API_BASE = import.meta.env.DEV
+  ? "/fruits"
+  : "https://www.fruityvice.com/api/fruit";
+
+export async function getAllFruits(signal?: AbortSignal): Promise<Fruit[]> {
+  const res = await fetch(`${API_BASE}/all`, {
+    signal,
+    headers: { Accept: "application/json" },
+  });
+
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status} ${res.statusText}`);
+  }
+
   const apiData: { name: string }[] = await res.json();
 
-  return apiData.map((item) => ({
-    id: crypto.randomUUID(),
-    name: item.name,
+  return apiData.map(({ name }) => ({
+    id: name.toLowerCase().replace(/\s+/g, "-"),
+    name,
     isSelected: false,
   }));
 }
