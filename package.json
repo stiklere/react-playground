@@ -2,6 +2,7 @@
   "name": "react-playground",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://stiklere.github.io/react-playground",
   "type": "module",
   "scripts": {
     "dev": "vite",
