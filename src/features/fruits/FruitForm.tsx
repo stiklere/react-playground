@@ -15,21 +15,19 @@ export function FruitForm({ onFormSubmit }: FruitFormProps) {
   };
 
   return (
-    <form
-      onSubmit={(event) => {
-        handleSubmit(event);
-      }}
-    >
-      <h4 className="heading-4">Add new fruit</h4>
-      <div className="w-full max-w-xs space-y-1.5 sm:max-w-sm md:max-w-md">
+    <form onSubmit={handleSubmit}>
+      <div className="space-y-1.5">
+        <h4 className="heading-4">Add new fruit</h4>
+
         <input
-          className="input"
+          className="input w-full"
           id="newFruit"
           name="newFruit"
           value={newFruitName}
-          onChange={(event) => setNewFruitName(event.target.value)}
+          onChange={(e) => setNewFruitName(e.target.value)}
           placeholder="Enter new fruit e.g. Banana"
         />
+
         <button
           type="submit"
           disabled={!newFruitName.trim()}
