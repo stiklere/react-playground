@@ -46,10 +46,16 @@ export function FruitList() {
     if (!title) {
       return;
     }
-    setFruits((prev) => [
-      ...prev,
-      { id: crypto.randomUUID(), name: title, isSelected: true },
-    ]);
+
+    setFruits((prev) => {
+      if (prev.some((f) => f.name.toLowerCase() === title.toLowerCase())) {
+        return prev;
+      }
+      return [
+        ...prev,
+        { id: crypto.randomUUID(), name: title, isSelected: true },
+      ];
+    });
   }, []);
 
   const deleteFruit = useCallback((id: string) => {
@@ -76,37 +82,35 @@ export function FruitList() {
   return (
     <>
       <div className="space-y-5">
-        <div className="content">
-          <AppHeader />
+        <AppHeader />
 
-          <div className="space-y-1.5">
-            <div>
-              <input
-                className="input w-full"
-                id="searchField"
-                name="searchField"
-                value={searchKey}
-                onChange={(e) => setSearchKey(e.target.value)}
-                placeholder="Search for fruit"
-              />
-            </div>
+        <div className="space-y-1.5">
+          <div>
+            <input
+              className="input w-full"
+              id="searchField"
+              name="searchField"
+              value={searchKey}
+              onChange={(e) => setSearchKey(e.target.value)}
+              placeholder="Search for fruit"
+            />
+          </div>
 
-            <div className="flex items-center gap-1.5">
-              <input
-                className="checkbox"
-                type="checkbox"
-                id="selectedOnly"
-                name="selectedOnly"
-                checked={showSelectedOnly}
-                onChange={(e) => setShowSelectedOnly(e.target.checked)}
-              />
-              <label htmlFor="selectedOnly">Show selected only</label>
-            </div>
+          <div className="flex items-center gap-1.5">
+            <input
+              className="checkbox"
+              type="checkbox"
+              id="selectedOnly"
+              name="selectedOnly"
+              checked={showSelectedOnly}
+              onChange={(e) => setShowSelectedOnly(e.target.checked)}
+            />
+            <label htmlFor="selectedOnly">Show selected only</label>
           </div>
         </div>
 
-        <div className="content">
-          <div className="flex justify-end">
+        <div className="flex justify-end">
+          {visibleFruits.length !== 0 && (
             <button
               type="button"
               className="btn btn-ghost"
@@ -114,10 +118,12 @@ export function FruitList() {
             >
               {allVisibleSelected ? "Deselect all fruits" : "Select all fruits"}
             </button>
-          </div>
+          )}
         </div>
 
-        <div className="content">
+        {visibleFruits.length === 0 ? (
+          <p className="text-sm text-slate-600">No fruits match your search.</p>
+        ) : (
           <ul className="m-0 list-none p-0">
             {visibleFruits.map((fruit) => (
               <li key={fruit.id} className="flex py-1.5">
@@ -129,16 +135,12 @@ export function FruitList() {
               </li>
             ))}
           </ul>
-        </div>
+        )}
       </div>
 
-      <div className="content">
-        <hr className="divider" />
-      </div>
+      <hr className="divider" />
 
-      <div className="content">
-        <FruitForm onFormSubmit={addNewFruit} />
-      </div>
+      <FruitForm onFormSubmit={addNewFruit} />
     </>
   );
 }
