@@ -4,7 +4,9 @@ import { FruitItem } from "./FruitItem";
 import { FruitForm } from "./FruitForm";
 import { AppHeader } from "../../components/AppHeader";
 import { useFruits } from "../../hooks/useFruits";
-import { FruitItemSkeleton } from "../../components/FruitListSkeleton";
+import { FruitItemSkeleton } from "../../components/FruitItemSkeleton";
+
+const SKELETON_ROWS = 20;
 
 export function FruitList() {
   const { data, loading, error } = useFruits();
@@ -82,12 +84,10 @@ export function FruitList() {
     setAllVisible(!allVisibleSelected);
   }, [allVisibleSelected, setAllVisible]);
 
-  const SKELETON_ROWS = 20;
-
   const list = error ? (
     <p className="text-red-600">Error: {error}</p>
   ) : loading ? (
-    <ul className="m-0 list-none p-0" role="status" aria-live="polite">
+    <ul className="m-0 list-none p-0">
       {Array.from({ length: SKELETON_ROWS }).map((_, i) => (
         <li key={i} className="flex py-1.5">
           <FruitItemSkeleton />
