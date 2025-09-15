@@ -76,11 +76,11 @@ export function FruitList() {
   return (
     <>
       <div className="space-y-5">
-        <div>
+        <div className="content">
           <AppHeader />
 
           <div className="space-y-1.5">
-            <div className="w-full max-w-xs sm:max-w-sm md:max-w-md">
+            <div>
               <input
                 className="input w-full"
                 id="searchField"
@@ -105,18 +105,22 @@ export function FruitList() {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={handleToggleAll}
-          >
-            {allVisibleSelected ? "Deselect all fruits" : "Select all fruits"}
-          </button>
+        <div className="content">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={handleToggleAll}
+            >
+              {allVisibleSelected ? "Deselect all fruits" : "Select all fruits"}
+            </button>
+          </div>
+        </div>
 
-          <ul className="px-0">
+        <div className="content">
+          <ul className="m-0 list-none p-0">
             {visibleFruits.map((fruit) => (
-              <li key={fruit.id} className="flex px-1.5 py-1.5">
+              <li key={fruit.id} className="flex py-1.5">
                 <FruitItem
                   fruit={fruit}
                   onSelect={toggleSelection}
@@ -128,8 +132,13 @@ export function FruitList() {
         </div>
       </div>
 
-      <hr className="divider" />
-      <FruitForm onFormSubmit={addNewFruit} />
+      <div className="content">
+        <hr className="divider" />
+      </div>
+
+      <div className="content">
+        <FruitForm onFormSubmit={addNewFruit} />
+      </div>
     </>
   );
 }
