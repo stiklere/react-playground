@@ -1,16 +1,21 @@
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 import type { Fruit } from "./Fruit.type";
 import { FruitItem } from "./FruitItem";
 import { FruitForm } from "./FruitForm";
 import { AppHeader } from "../../components/AppHeader";
+import { useFruits } from "../../hooks/useFruits";
+import { FruitItemSkeleton } from "../../components/FruitItemSkeleton";
 
-const INITIAL_FRUITS: Fruit[] = [
-  { id: "1", name: "Apple", isSelected: false },
-  { id: "2", name: "Orange", isSelected: true },
-];
+const SKELETON_ROWS = 20;
 
 export function FruitList() {
-  const [fruits, setFruits] = useState<Fruit[]>(INITIAL_FRUITS);
+  const { data, loading, error } = useFruits();
+
+  const [fruits, setFruits] = useState<Fruit[]>([]);
+  useEffect(() => {
+    if (data) setFruits(data);
+  }, [data]);
+
   const [searchKey, setSearchKey] = useState("");
   const [showSelectedOnly, setShowSelectedOnly] = useState(false);
 
@@ -79,6 +84,34 @@ export function FruitList() {
     setAllVisible(!allVisibleSelected);
   }, [allVisibleSelected, setAllVisible]);
 
+  const list = error ? (
+    <p className="text-red-600">Error: {error}</p>
+  ) : loading ? (
+    <ul className="m-0 list-none p-0">
+      {Array.from({ length: SKELETON_ROWS }).map((_, i) => (
+        <li key={i} className="flex py-1.5">
+          <FruitItemSkeleton />
+        </li>
+      ))}
+    </ul>
+  ) : visibleFruits.length === 0 ? (
+    <p className="text-sm text-slate-600">No fruits match your search.</p>
+  ) : (
+    <ul className="m-0 list-none p-0">
+      {visibleFruits.map((fruit) => (
+        <li key={fruit.id} className="flex py-1.5">
+          <FruitItem
+            fruit={fruit}
+            onSelect={toggleSelection}
+            onDelete={deleteFruit}
+          />
+        </li>
+      ))}
+    </ul>
+  );
+
+  const showToolbar = !loading && !error && visibleFruits.length > 0;
+
   return (
     <>
       <div className="space-y-5">
@@ -110,32 +143,23 @@ export function FruitList() {
         </div>
 
         <div className="flex justify-end">
-          {visibleFruits.length !== 0 && (
-            <button
-              type="button"
-              className="btn btn-ghost"
-              onClick={handleToggleAll}
-            >
-              {allVisibleSelected ? "Deselect all fruits" : "Select all fruits"}
-            </button>
-          )}
+          <button
+            disabled={!showToolbar}
+            type="button"
+            className="btn btn-ghost"
+            onClick={handleToggleAll}
+          >
+            {allVisibleSelected ? "Deselect all fruits" : "Select all fruits"}
+          </button>
         </div>
 
-        {visibleFruits.length === 0 ? (
-          <p className="text-sm text-slate-600">No fruits match your search.</p>
-        ) : (
-          <ul className="m-0 list-none p-0">
-            {visibleFruits.map((fruit) => (
-              <li key={fruit.id} className="flex py-1.5">
-                <FruitItem
-                  fruit={fruit}
-                  onSelect={toggleSelection}
-                  onDelete={deleteFruit}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+        <div
+          className="max-h-[30vh] overflow-y-auto rounded-lg border border-slate-300 bg-white p-2 md:max-h-[50vh] lg:max-h-[60vh]"
+          role="region"
+          aria-label="Fruit list"
+        >
+          {list}
+        </div>
       </div>
 
       <hr className="divider" />
