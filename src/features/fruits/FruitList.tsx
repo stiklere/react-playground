@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Fruit } from "./Fruit.type";
 import { FruitItem } from "./FruitItem";
 import { FruitForm } from "./FruitForm";
+import { AppHeader } from "../../components/AppHeader";
 
 export function FruitList() {
   const initialFruits: Fruit[] = [
@@ -62,48 +63,64 @@ export function FruitList() {
 
   return (
     <>
-      <div>
-        <h4>Search for fruit</h4>
-        <input
-          id="searchField"
-          name="searchField"
-          value={searchKey}
-          onChange={(e) => setSearchKey(e.target.value)}
-          placeholder="Enter fruit name"
-        />
+      <div className="space-y-5">
+        <div>
+          <AppHeader />
 
-        <label htmlFor="selectedOnly">Show selected only</label>
-        <input
-          type="checkbox"
-          id="selectedOnly"
-          name="selectedOnly"
-          onChange={(event) => setShowSelectedOnly(event.target.checked)}
-        ></input>
+          <div className="space-y-1.5">
+            <div className="w-full max-w-xs sm:max-w-sm md:max-w-md">
+              <input
+                className="input w-full"
+                id="searchField"
+                name="searchField"
+                value={searchKey}
+                onChange={(e) => setSearchKey(e.target.value)}
+                placeholder="Search for fruit"
+              />
+            </div>
+
+            <div className="flex items-center space-x-1.5">
+              <input
+                className="checkbox"
+                type="checkbox"
+                id="selectedOnly"
+                name="selectedOnly"
+                onChange={(event) => setShowSelectedOnly(event.target.checked)}
+              ></input>
+              <label htmlFor="selectedOnly">Show selected only</label>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center">
+            <input
+              className="checkbox"
+              type="checkbox"
+              id="selectAll"
+              name="selectAll"
+              checked={allVisibleSelected}
+              onChange={(event) => toggleSelectAll(event.target.checked)}
+            ></input>
+
+            <label htmlFor="selectAll">Select all</label>
+          </div>
+
+          <ul className="px-0">
+            {visibleFruits.map((fruit) => (
+              <li key={fruit.id} className="flex px-[5px] py-[5px]">
+                <FruitItem
+                  key={fruit.id}
+                  fruit={fruit}
+                  onSelect={toggleSelection}
+                  onDelete={deleteFruit}
+                ></FruitItem>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="selectAll">Select all</label>
-        <input
-          type="checkbox"
-          id="selectAll"
-          name="selectAll"
-          checked={allVisibleSelected}
-          onChange={(event) => toggleSelectAll(event.target.checked)}
-        ></input>
-
-        <ul>
-          {visibleFruits.map((fruit) => (
-            <li key={fruit.id} style={{ display: "flex", padding: "5px" }}>
-              <FruitItem
-                key={fruit.id}
-                fruit={fruit}
-                onSelect={toggleSelection}
-                onDelete={deleteFruit}
-              ></FruitItem>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <hr className="divider" />
       <FruitForm onFormSubmit={addNewFruit}></FruitForm>
     </>
   );

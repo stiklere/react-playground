@@ -9,23 +9,30 @@ type FruitItemProps = {
 export function FruitItem({ fruit, onSelect, onDelete }: FruitItemProps) {
   return (
     <>
-      <span
-        style={{
-          textDecoration: fruit.isSelected ? "underline" : "none",
-          padding: "5px",
-        }}
-      >
-        {fruit.name}
-      </span>
+      <div className="flex item-baseline space-x-1.5">
+        <span
+          className={`fruit-item ${fruit.isSelected && "fruit-item-selected"}`}
+        >
+          {fruit.name}
+        </span>
 
-      <div style={{ display: "flex", gap: "5px" }}>
-        <button onClick={() => onSelect(fruit.id)}>
-          {fruit.isSelected ? "Unselect" : "Select"}
-        </button>
+        <div className="space-x-1.5">
+          <button
+            className="btn btn-primary"
+            onClick={() => onSelect(fruit.id)}
+          >
+            {fruit.isSelected ? "Unselect" : "Select"}
+          </button>
 
-        {!fruit.isSelected && (
-          <button onClick={() => onDelete(fruit.id)}>Delete fruit</button>
-        )}
+          {!fruit.isSelected && (
+            <button
+              className="btn btn-danger"
+              onClick={() => onDelete(fruit.id)}
+            >
+              Delete fruit
+            </button>
+          )}
+        </div>
       </div>
     </>
   );
