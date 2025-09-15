@@ -84,7 +84,7 @@ export function FruitList() {
 
   const SKELETON_ROWS = 20;
 
-  const listContent = error ? (
+  const list = error ? (
     <p className="text-red-600">Error: {error}</p>
   ) : loading ? (
     <ul className="m-0 list-none p-0" role="status" aria-live="polite">
@@ -144,7 +144,7 @@ export function FruitList() {
 
         <div className="flex justify-end">
           <button
-            disabled={showToolbar}
+            disabled={!showToolbar}
             type="button"
             className="btn btn-ghost"
             onClick={handleToggleAll}
@@ -153,7 +153,13 @@ export function FruitList() {
           </button>
         </div>
 
-        {listContent}
+        <div
+          className="max-h-[30vh] overflow-y-auto rounded-lg border border-slate-300 bg-white p-2 md:max-h-[50vh] lg:max-h-[60vh]"
+          role="region"
+          aria-label="Fruit list"
+        >
+          {list}
+        </div>
       </div>
 
       <hr className="divider" />
