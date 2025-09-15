@@ -21,7 +21,7 @@ export function FruitForm({ onFormSubmit }: FruitFormProps) {
       }}
     >
       <h4 className="heading-4">Add new fruit</h4>
-      <div className="w-full max-w-xs sm:max-w-sm md:max-w-md space-y-1.5">
+      <div className="w-full max-w-xs space-y-1.5 sm:max-w-sm md:max-w-md">
         <input
           className="input"
           id="newFruit"

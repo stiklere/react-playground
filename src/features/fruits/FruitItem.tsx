@@ -9,7 +9,7 @@ type FruitItemProps = {
 export function FruitItem({ fruit, onSelect, onDelete }: FruitItemProps) {
   return (
     <>
-      <div className="flex item-baseline space-x-1.5">
+      <div className="item-baseline flex space-x-1.5">
         <span
           className={`fruit-item ${fruit.isSelected && "fruit-item-selected"}`}
         >

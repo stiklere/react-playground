@@ -17,8 +17,8 @@ export function FruitList() {
   const toggleSelection = (id: string) => {
     setFruits((prev) =>
       prev.map((fruit) =>
-        fruit.id === id ? { ...fruit, isSelected: !fruit.isSelected } : fruit
-      )
+        fruit.id === id ? { ...fruit, isSelected: !fruit.isSelected } : fruit,
+      ),
     );
   };
 
@@ -44,7 +44,7 @@ export function FruitList() {
 
   const visibleFruits = fruits.filter(
     (fruit) =>
-      isVisible(fruit, searchKey) && (!showSelectedOnly || fruit.isSelected)
+      isVisible(fruit, searchKey) && (!showSelectedOnly || fruit.isSelected),
   );
 
   const allVisibleSelected =
@@ -56,8 +56,8 @@ export function FruitList() {
         isVisible(f, searchKey) &&
         (!showSelectedOnly || f.isSelected || checked)
           ? { ...f, isSelected: checked }
-          : f
-      )
+          : f,
+      ),
     );
   };
 
